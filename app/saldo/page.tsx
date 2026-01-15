@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import Image from "next/image"
 
 interface Pemasukan {
   id: string
@@ -28,6 +29,67 @@ interface ChartData {
 
 const MAX_Y_AXIS = 15000000
 
+// ====================
+// BANK CAROUSEL BUTTON
+// ====================
+interface Bank {
+  name: string
+  number: string
+}
+
+const banks: Bank[] = [
+  { name: "BCA", number: "5665142849" },
+  { name: "BCA", number: "5665142849" },
+  { name: "BCA", number: "5665142849" },
+  { name: "BCA", number: "5665142849" },
+]
+
+function BankCarouselButton() {
+  const [index, setIndex] = useState(0)
+  const length = banks.length
+
+  const prev = () => setIndex((prev) => (prev === 0 ? length - 1 : prev - 1))
+  const next = () => setIndex((prev) => (prev === length - 1 ? 0 : prev + 1))
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+        <div className="flex justify-center">
+          {/* Card */}
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-lg flex flex-col items-center hover:scale-105 transition-transform w-64 sm:w-56 md:w-64">
+            <Image
+              src="/bca.jpg"
+              alt={`Bank ${banks[index].name}`}
+              width={160}
+              height={80}
+              className="object-contain w-40 sm:w-48 md:w-56 h-auto"
+            />
+            <p className="mt-3 font-semibold text-lg sm:text-base md:text-lg">{banks[index].number}</p>
+            <p className="text-xs text-muted-foreground mt-1 text-center">Mohamad Irpani (Konfirmasi 0812-2011-0925)</p>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <button
+          onClick={prev}
+          className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition"
+        >
+          ‹
+        </button>
+        <button
+          onClick={next}
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition"
+        >
+          ›
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ====================
+// SALDO PAGE
+// ====================
 export default function SaldoPage() {
   const [chartData, setChartData] = useState<ChartData[]>([])
   const [totalSaldo, setTotalSaldo] = useState(0)
@@ -139,6 +201,11 @@ export default function SaldoPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Bank Carousel Button */}
+        <div className="mb-8 flex justify-center">
+          <BankCarouselButton />
+        </div>
 
         {/* Filter & Chart */}
         <Card>
