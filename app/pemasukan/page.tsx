@@ -33,18 +33,8 @@ export default function PemasukanPage() {
   const years = Array.from({ length: 10 }, (_, i) => currentYear - i)
 
   const monthNames = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember",
   ]
 
   const fetchData = async () => {
@@ -52,8 +42,7 @@ export default function PemasukanPage() {
     try {
       const { data, error } = await supabase
         .from("iuran_history")
-        .select(
-          `
+        .select(`
           id,
           warga_id,
           tahun,
@@ -61,14 +50,19 @@ export default function PemasukanPage() {
           nominal,
           status,
           warga:warga_id(nama, blok, lorong)
-        `,
-        )
+        `)
         .eq("tahun", selectedYear)
         .eq("bulan", selectedMonth)
         .order("warga_id", { ascending: true })
 
       if (error) throw error
-      setData(data || [])
+
+      setData(
+        (data || []).map((item: any) => ({
+          ...item,
+          warga: item.warga?.[0] || { nama: "-", blok: null, lorong: null },
+        }))
+      )
     } catch (error) {
       console.error("Error fetching pemasukan:", error)
     } finally {
@@ -84,7 +78,6 @@ export default function PemasukanPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <Button variant="ghost" asChild className="mb-4">
@@ -95,7 +88,6 @@ export default function PemasukanPage() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Card>
           <CardHeader>
@@ -113,9 +105,7 @@ export default function PemasukanPage() {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0"
                 >
                   {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
+                    <option key={year} value={year}>{year}</option>
                   ))}
                 </select>
               </div>
@@ -128,9 +118,7 @@ export default function PemasukanPage() {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0"
                 >
                   {monthNames.map((month, idx) => (
-                    <option key={idx} value={idx + 1}>
-                      {month}
-                    </option>
+                    <option key={idx} value={idx + 1}>{month}</option>
                   ))}
                 </select>
               </div>
@@ -166,9 +154,7 @@ export default function PemasukanPage() {
                 <TableBody>
                   {isLoading ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-4">
-                        Loading...
-                      </TableCell>
+                      <TableCell colSpan={6} className="text-center py-4">Loading...</TableCell>
                     </TableRow>
                   ) : data.length === 0 ? (
                     <TableRow>
@@ -180,15 +166,17 @@ export default function PemasukanPage() {
                     data.map((item, index) => (
                       <TableRow key={item.id}>
                         <TableCell className="font-medium">{index + 1}</TableCell>
-                        <TableCell>{(item.warga as any)?.nama || "-"}</TableCell>
-                        <TableCell>{(item.warga as any)?.blok || "-"}</TableCell>
-                        <TableCell>{(item.warga as any)?.lorong || "-"}</TableCell>
+                        <TableCell>{item.warga.nama || "-"}</TableCell>
+                        <TableCell>{item.warga.blok || "-"}</TableCell>
+                        <TableCell>{item.warga.lorong || "-"}</TableCell>
                         <TableCell className="text-right font-medium">
                           Rp {item.nominal.toLocaleString("id-ID")}
                         </TableCell>
                         <TableCell className="text-center">
                           <span
-                            className={`inline-block px-2 py-1 rounded text-xs font-medium ${item.status === "sudah_bayar" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                            className={`inline-block px-2 py-1 rounded text-xs font-medium ${
+                              item.status === "sudah_bayar" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                            }`}
                           >
                             {item.status === "sudah_bayar" ? "Sudah" : "Belum"}
                           </span>
@@ -203,7 +191,6 @@ export default function PemasukanPage() {
         </Card>
       </main>
 
-      {/* Footer */}
       <footer className="border-t bg-muted/50 mt-12">
         <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="text-center text-sm text-muted-foreground">
