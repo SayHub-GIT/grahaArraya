@@ -1,103 +1,223 @@
-import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { TrendingUp, DollarSign, FileText, Users, Package, ClipboardList } from "lucide-react"
+
+export const metadata = {
+  title: "Graha Arraya Korwil 3 - Transparansi Keuangan",
+  description: "Website transparansi keuangan perumahan Graha Arraya Korwil 3",
+}
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card">
+        <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="flex items-start gap-6">
+            <div className="flex-shrink-0">
+              <img src="@/public/GA.png" alt="GA Logo" className="h-20 w-auto" />
+            </div>
+            <div className="flex-1">
+              <h1 className="text-4xl font-bold tracking-tight">Graha Arraya Korwil 3</h1>
+              <p className="mt-2 text-lg text-muted-foreground">Desa Cibadak, Kecamatan Ciampea, Bogor</p>
+              <p className="mt-4 text-sm">
+                <span className="font-semibold">Hubungi Kami:</span> +62 XXX-XXXX-XXXX | admin@graharaya.com
+              </p>
+            </div>
+          </div>
         </div>
+      </header>
+
+      {/* Navigation */}
+      <nav className="sticky top-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center gap-1 overflow-x-auto py-2 md:justify-start md:gap-2">
+            <Button variant="ghost" asChild size="sm">
+              <Link href="/">Beranda</Link>
+            </Button>
+            <Button variant="ghost" asChild size="sm">
+              <Link href="/pemasukan">Pemasukan</Link>
+            </Button>
+            <Button variant="ghost" asChild size="sm">
+              <Link href="/pengeluaran">Pengeluaran</Link>
+            </Button>
+            <Button variant="ghost" asChild size="sm">
+              <Link href="/saldo">Saldo KAS</Link>
+            </Button>
+            <Button variant="ghost" asChild size="sm">
+              <Link href="/hibah">Hibah</Link>
+            </Button>
+            <Button variant="ghost" asChild size="sm">
+              <Link href="/rencana-pembelanjaan">Rencana</Link>
+            </Button>
+            <Button variant="ghost" asChild size="sm">
+              <Link href="/pembelajaran-anggaran">Pembelajaran</Link>
+            </Button>
+            <Button variant="ghost" asChild size="sm">
+              <Link href="/struktural">Struktur</Link>
+            </Button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="container mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* Hero Section */}
+        <section className="mb-12">
+          <div className="rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 p-8">
+            <h2 className="text-2xl font-bold">Selamat Datang</h2>
+            <p className="mt-2 text-muted-foreground">
+              Website ini menyediakan informasi transparansi keuangan perumahan Graha Arraya Korwil 3. Semua warga dapat
+              melihat laporan keuangan secara real-time untuk memastikan pengelolaan dana yang transparan dan akuntabel.
+            </p>
+          </div>
+        </section>
+
+        {/* Feature Cards */}
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <DollarSign className="h-4 w-4" />
+                Pemasukan
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Lihat riwayat pemasukan kas dari iuran warga</p>
+              <Button asChild variant="outline" size="sm" className="mt-4 w-full bg-transparent">
+                <Link href="/pemasukan">Lihat Detail</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <FileText className="h-4 w-4" />
+                Pengeluaran
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Lihat riwayat pengeluaran kas untuk keperluan perumahan</p>
+              <Button asChild variant="outline" size="sm" className="mt-4 w-full bg-transparent">
+                <Link href="/pengeluaran">Lihat Detail</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <TrendingUp className="h-4 w-4" />
+                Saldo KAS
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Lihat grafik saldo kas dan trend pemasukan/pengeluaran</p>
+              <Button asChild variant="outline" size="sm" className="mt-4 w-full bg-transparent">
+                <Link href="/saldo">Lihat Detail</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Users className="h-4 w-4" />
+                Struktur
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Lihat struktur organisasi pengelola keuangan</p>
+              <Button asChild variant="outline" size="sm" className="mt-4 w-full bg-transparent">
+                <Link href="/struktural">Lihat Detail</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <ClipboardList className="h-4 w-4" />
+                Rencana Pembelanjaan
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Lihat rencana pembelian dan progress status</p>
+              <Button asChild variant="outline" size="sm" className="mt-4 w-full bg-transparent">
+                <Link href="/rencana-pembelanjaan">Lihat Detail</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Package className="h-4 w-4" />
+                Pembelajaran Anggaran
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Lihat daftar aset dan kondisi barang yang dibeli</p>
+              <Button asChild variant="outline" size="sm" className="mt-4 w-full bg-transparent">
+                <Link href="/pembelajaran-anggaran">Lihat Detail</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Info Section */}
+        <section className="mt-12 grid gap-8 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Tentang Transparansi Keuangan</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p>
+                Transparansi keuangan adalah komitmen kami untuk memastikan semua warga dapat melihat dan memahami
+                bagaimana dana perumahan dikelola.
+              </p>
+              <p>
+                Setiap pencatatan pemasukan dan pengeluaran dapat diakses oleh semua warga kapan saja melalui website
+                ini.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Prinsip Pengelolaan</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <ul className="space-y-2">
+                <li className="flex gap-2">
+                  <span className="font-bold">✓</span>
+                  <span>Transparan - Semua data terbuka untuk publik</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-bold">✓</span>
+                  <span>Akuntabel - Setiap transaksi tercatat dengan detail</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-bold">✓</span>
+                  <span>Tepercaya - Laporan real-time tanpa manipulasi</span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="border-t bg-muted/50 mt-12">
+        <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="text-center text-sm text-muted-foreground">
+            <p>Graha Arraya Korwil 3 | Desa Cibadak, Kecamatan Ciampea, Bogor</p>
+            <p className="mt-2">© 2026 - Transparansi Keuangan Perumahan</p>
+          </div>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
