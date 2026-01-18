@@ -73,7 +73,7 @@ export default function PembelajaranAnggaran() {
           <Button variant="ghost" asChild className="mb-4">
             <Link href="/">← Kembali</Link>
           </Button>
-          <h1 className="text-3xl font-bold">Pembelajaran Anggaran</h1>
+          <h1 className="text-3xl font-bold">Pembelajaaan Anggaran</h1>
           <p className="text-sm text-muted-foreground">Daftar aset dan kondisi barang yang dibeli</p>
         </div>
       </header>
@@ -120,7 +120,7 @@ export default function PembelajaranAnggaran() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Data Pembelajaran Anggaran</CardTitle>
+            <CardTitle>Data Pembelajaan Anggaran</CardTitle>
             <CardDescription>Daftar aset berdasarkan rencana pembelanjaan yang sudah dibeli</CardDescription>
           </CardHeader>
           <CardContent>

@@ -215,17 +215,6 @@ export default function RencanaPembelanjaanManagement() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="no">No</Label>
-                <Input
-                  id="no"
-                  type="number"
-                  value={formData.no}
-                  onChange={(e) => setFormData({ ...formData, no: e.target.value })}
-                  required
-                  min="1"
-                />
-              </div>
-              <div className="space-y-2">
                 <Label htmlFor="jenis">Jenis Barang</Label>
                 <Input
                   id="jenis"

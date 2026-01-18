@@ -36,7 +36,7 @@ export default function Home() {
     { label: "Saldo KAS", href: "/saldo" },
     { label: "Hibah", href: "/hibah" },
     { label: "Rencana", href: "/rencana-pembelanjaan" },
-    { label: "Pembelajaan", href: "/pembelajaan-anggaran" },
+    { label: "Inventaris", href: "/inventaris-anggaran" },
     { label: "Struktur", href: "/struktural" },
   ]
 
@@ -210,7 +210,7 @@ export default function Home() {
               { icon: TrendingUp, title: "Saldo KAS", desc: "Lihat grafik saldo kas dan trend pemasukan/pengeluaran", link: "/saldo", color: "from-green-500 to-emerald-500" },
               { icon: Users, title: "Struktur", desc: "Lihat struktur organisasi pengelola keuangan", link: "/struktural", color: "from-emerald-500 to-green-500" },
               { icon: ClipboardList, title: "Rencana Pembelanjaan", desc: "Lihat rencana pembelian dan progress status", link: "/rencana-pembelanjaan", color: "from-orange-400 to-yellow-500" },
-              { icon: Package, title: "Pembelajaan Anggaran", desc: "Lihat daftar aset dan kondisi barang yang dibeli", link: "/pembelajaan-anggaran", color: "from-yellow-500 to-orange-500" }
+              { icon: Package, title: "Inventaris Anggaran", desc: "Lihat daftar aset dan kondisi barang yang dibeli", link: "/inventaris-anggaran", color: "from-yellow-500 to-orange-500" }
             ].map((feature, idx) => {
               const Icon = feature.icon
               return (

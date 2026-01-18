@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS iuran_history (
   warga_id UUID REFERENCES warga(id) ON DELETE CASCADE,
   tahun INTEGER NOT NULL,
   bulan INTEGER NOT NULL,
-  nominal INTEGER DEFAULT 50000,
+  nominal INTEGER DEFAULT 10000,
   status VARCHAR(20) DEFAULT 'belum_bayar', -- belum_bayar, sudah_bayar
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),

@@ -107,7 +107,7 @@ export default function PembelajaranAnggaran() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Pembelajaran Anggaran</CardTitle>
+        <CardTitle>Pembelajaan Anggaran</CardTitle>
         <CardDescription>
           Lihat daftar barang yang sudah dibeli (data otomatis dari Rencana Pembelanjaan)
         </CardDescription>
@@ -169,7 +169,7 @@ export default function PembelajaranAnggaran() {
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>Edit Pembelajaran Anggaran</DialogTitle>
+                            <DialogTitle>Edit Pembelajaan Anggaran</DialogTitle>
                           </DialogHeader>
                           <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">

@@ -78,7 +78,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="pengeluaran">Pengeluaran</TabsTrigger>
             <TabsTrigger value="hibah">Hibah</TabsTrigger>
             <TabsTrigger value="rencana">Rencana</TabsTrigger>
-            <TabsTrigger value="pembelajaran">Pembelajaran</TabsTrigger>
+            <TabsTrigger value="pembelajaran">Pembelajaan</TabsTrigger>
             <TabsTrigger value="struktural">Struktural</TabsTrigger>
           </TabsList>
 

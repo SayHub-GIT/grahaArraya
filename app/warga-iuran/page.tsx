@@ -35,7 +35,7 @@ export default function WargaIuranPage() {
   const [selectedMonth, setSelectedMonth] = useState((currentDate.getMonth() + 1).toString().padStart(2, "0"))
 
   const supabase = createClient()
-  const IURAN_DEFAULT = 50000
+  const IURAN_DEFAULT = 10000
 
   const fetchData = async () => {
     setIsLoading(true)

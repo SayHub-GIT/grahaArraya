@@ -38,7 +38,7 @@ export default function WargaIuranManagement() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
 
   const supabase = createClient()
-  const IURAN_DEFAULT = 50000
+  const IURAN_DEFAULT = 10000
 
   const monthNames = [
     "Januari",
@@ -54,6 +54,9 @@ export default function WargaIuranManagement() {
     "November",
     "Desember",
   ]
+
+  const startYear = 2026
+  const years = Array.from({ length: 10 }, (_, i) => startYear + i)
 
   const fetchData = async () => {
     setIsLoading(true)
@@ -115,9 +118,16 @@ export default function WargaIuranManagement() {
     fetchData()
   }, [selectedYear, selectedMonth])
 
-  const handleEditNominal = async (wargaId: string, newNominal: number) => {
+  const handleEditNominal = async () => {
     try {
-      const existingIuran = iuranMap[wargaId]
+      if (!editingWargaId) {
+        console.error("[v0] editingWargaId is undefined")
+        alert("Error: Warga tidak teridentifikasi")
+        return
+      }
+
+      const existingIuran = iuranMap[editingWargaId]
+      const newNominal = Number.parseInt(editNominal) || 0
       const isPaid = newNominal >= IURAN_DEFAULT
 
       if (existingIuran) {
@@ -132,7 +142,7 @@ export default function WargaIuranManagement() {
         if (error) throw error
       } else {
         const { error } = await supabase.from("iuran_history").insert({
-          warga_id: wargaId,
+          warga_id: editingWargaId,
           tahun: selectedYear,
           bulan: selectedMonth,
           nominal: newNominal,
@@ -171,13 +181,17 @@ export default function WargaIuranManagement() {
         <div className="flex gap-4">
           <div className="space-y-2">
             <Label>Tahun</Label>
-            <Input
-              type="number"
+            <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
-              min="2020"
-              className="w-32"
-            />
+              className="flex h-10 w-40 rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="space-y-2">
             <Label>Bulan</Label>
@@ -295,7 +309,7 @@ export default function WargaIuranManagement() {
                               </div>
                               <Button
                                 className="w-full"
-                                onClick={() => handleEditNominal(warga.id, Number.parseInt(editNominal) || 0)}
+                                onClick={handleEditNominal}
                               >
                                 Simpan
                               </Button>
