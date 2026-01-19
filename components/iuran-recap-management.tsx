@@ -31,7 +31,7 @@ export default function IuranRecapManagement() {
   const [selectedEndMonth, setSelectedEndMonth] = useState(6)
 
   const supabase = createClient()
-  const IURAN_TARGET = 50000
+  const IURAN_TARGET = 10000
   const PERIOD_MONTHS = selectedEndMonth - selectedStartMonth + 1
 
   const monthNames = [

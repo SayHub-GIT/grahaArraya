@@ -30,7 +30,7 @@ export default function PengeluaranPage() {
 
   const supabase = createClient()
   const currentYear = new Date().getFullYear()
-  const years = Array.from({ length: 10 }, (_, i) => currentYear - i)
+  const years = Array.from({ length: 10 }, (_, i) => currentYear + i)
 
   const fetchData = async () => {
     setIsLoading(true)
@@ -141,7 +141,7 @@ export default function PengeluaranPage() {
           </CardHeader>
           <CardContent>
             <div className="mb-6 rounded-lg bg-destructive/10 p-4">
-              <p className="text-sm text-muted-foreground">Saldo Sisa</p>
+              <p className="text-sm text-muted-foreground">Dana Terpakai</p>
               <p className="text-3xl font-bold">Rp {totalNominal.toLocaleString("id-ID")}</p>
             </div>
 

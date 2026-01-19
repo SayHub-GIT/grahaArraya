@@ -107,9 +107,9 @@ export default function PembelajaranAnggaran() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Pembelajaan Anggaran</CardTitle>
+        <CardTitle>Inventaris Kepemilikan</CardTitle>
         <CardDescription>
-          Lihat daftar barang yang sudah dibeli (data otomatis dari Rencana Pembelanjaan)
+          Lihat daftar barang yang sudah dibeli (data otomatis dari Rencana)
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -15,7 +15,6 @@ import { id } from "date-fns/locale"
 
 interface RencanaPembelanjaan {
   id: string
-  no: number
   jenis: string
   tanggal: string
   nominal: number
@@ -29,7 +28,6 @@ export default function RencanaPembelanjaanManagement() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
-    no: "",
     jenis: "",
     tanggal: format(new Date(), "yyyy-MM-dd"),
     nominal: "",
@@ -44,7 +42,7 @@ export default function RencanaPembelanjaanManagement() {
       const { data, error } = await supabase
         .from("rencana_pembelanjaan")
         .select("*")
-        .order("tanggal", { ascending: false })
+        .order("tanggal", { ascending: true })
 
       if (error) throw error
       setData(data || [])
@@ -69,11 +67,22 @@ export default function RencanaPembelanjaanManagement() {
         return
       }
 
+      if (!formData.jenis.trim()) {
+        alert("Jenis barang harus diisi")
+        return
+      }
+
+      if (!formData.tanggal) {
+        alert("Tanggal harus diisi")
+        return
+      }
+
+      console.log("[v0] Saving rencana:", { jenis: formData.jenis, tanggal: formData.tanggal, nominal: nominalNum })
+
       if (editingId) {
         const { error } = await supabase
           .from("rencana_pembelanjaan")
           .update({
-            no: Number.parseInt(formData.no),
             jenis: formData.jenis,
             tanggal: formData.tanggal,
             nominal: nominalNum,
@@ -82,22 +91,41 @@ export default function RencanaPembelanjaanManagement() {
           })
           .eq("id", editingId)
 
-        if (error) throw error
+        if (error) {
+          console.error("[v0] Update error:", error)
+          throw error
+        }
       } else {
-        const { error } = await supabase.from("rencana_pembelanjaan").insert({
-          no: Number.parseInt(formData.no),
-          jenis: formData.jenis,
-          tanggal: formData.tanggal,
-          nominal: nominalNum,
-          status_dibeli: false,
-          tanggal_dibeli: null,
-        })
+        // Get the next sequence number
+        const { data: maxData } = await supabase
+          .from("rencana_pembelanjaan")
+          .select("no")
+          .order("no", { ascending: false })
+          .limit(1)
 
-        if (error) throw error
+        const nextNo = ((maxData?.[0]?.no as number) || 0) + 1
+
+        const { data: insertResult, error } = await supabase
+          .from("rencana_pembelanjaan")
+          .insert({
+            jenis: formData.jenis,
+            tanggal: formData.tanggal,
+            nominal: nominalNum,
+            no: nextNo,
+            status_dibeli: false,
+            tanggal_dibeli: null,
+          })
+          .select()
+
+        if (error) {
+          console.error("[v0] Insert error:", error)
+          throw error
+        }
+
+        console.log("[v0] Insert successful:", insertResult)
       }
 
       setFormData({
-        no: "",
         jenis: "",
         tanggal: format(new Date(), "yyyy-MM-dd"),
         nominal: "",
@@ -106,15 +134,15 @@ export default function RencanaPembelanjaanManagement() {
       setEditingId(null)
       setIsDialogOpen(false)
       fetchData()
-    } catch (error) {
-      console.error("Error saving data:", error)
-      alert("Gagal menyimpan data")
+    } catch (error: unknown) {
+      console.error("[v0] Error saving data:", error)
+      const errorMsg = error instanceof Error ? error.message : typeof error === "object" && error !== null ? JSON.stringify(error) || "Unknown error" : "Unknown error"
+      alert(`Gagal menyimpan data: ${errorMsg}`)
     }
   }
 
   const handleEdit = (item: RencanaPembelanjaan) => {
     setFormData({
-      no: item.no.toString(),
       jenis: item.jenis,
       tanggal: item.tanggal,
       nominal: item.nominal.toString(),
@@ -154,13 +182,12 @@ export default function RencanaPembelanjaanManagement() {
         // Create pembelajaran_anggaran entry
         await supabase.from("pembelajaran_anggaran").insert({
           rencana_pembelanjaan_id: item.id,
-          no: item.no,
           jumlah: 1,
           kondisi: "Baik",
           tanggal_perubahan_kondisi: new Date().toISOString(),
         })
 
-        // Auto create pengeluaran entry to deduct from saldo (nominal belanja otomatis)
+        // Auto create pengeluaran entry to deduct from saldo
         const pengeluaranName = `Pembelian Barang - ${item.jenis}`
         await supabase.from("pengeluaran").insert({
           tanggal: new Date().toISOString().split("T")[0],
@@ -187,7 +214,7 @@ export default function RencanaPembelanjaanManagement() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
         <div>
-          <CardTitle>Rencana Pembelanjaan Anggaran</CardTitle>
+          <CardTitle>Rencana Inventaris Anggaran</CardTitle>
           <CardDescription>Kelola rencana pembelian dan tracking status</CardDescription>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -196,7 +223,6 @@ export default function RencanaPembelanjaanManagement() {
               onClick={() => {
                 setEditingId(null)
                 setFormData({
-                  no: "",
                   jenis: "",
                   tanggal: format(new Date(), "yyyy-MM-dd"),
                   nominal: "",
@@ -211,7 +237,7 @@ export default function RencanaPembelanjaanManagement() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{editingId ? "Edit Rencana" : "Tambah Rencana Pembelanjaan"}</DialogTitle>
+              <DialogTitle>{editingId ? "Edit Rencana" : "Tambah Rencana Inventaris"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -257,9 +283,11 @@ export default function RencanaPembelanjaanManagement() {
             <p className="text-sm text-muted-foreground">Total Rencana</p>
             <p className="text-2xl font-bold">Rp {totalNominal.toLocaleString("id-ID")}</p>
           </div>
-          <div className="rounded-lg bg-green-50 p-4">
+          <div className="rounded-lg bg-green-50 dark:bg-green-950 p-4">
             <p className="text-sm text-muted-foreground">Total Terbeli</p>
-            <p className="text-2xl font-bold text-green-600">Rp {totalDibeli.toLocaleString("id-ID")}</p>
+            <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+              Rp {totalDibeli.toLocaleString("id-ID")}
+            </p>
           </div>
         </div>
 
@@ -267,7 +295,6 @@ export default function RencanaPembelanjaanManagement() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-8">No</TableHead>
                 <TableHead>Jenis Barang</TableHead>
                 <TableHead className="w-32">Tanggal</TableHead>
                 <TableHead className="w-32 text-right">Nominal</TableHead>
@@ -278,20 +305,19 @@ export default function RencanaPembelanjaanManagement() {
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-4">
+                  <TableCell colSpan={5} className="text-center py-4">
                     Loading...
                   </TableCell>
                 </TableRow>
               ) : data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
-                    Belum ada rencana pembelanjaan
+                  <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
+                    Belum ada rencana inventaris
                   </TableCell>
                 </TableRow>
               ) : (
                 data.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell className="font-medium">{item.no}</TableCell>
                     <TableCell>{item.jenis}</TableCell>
                     <TableCell>{format(new Date(item.tanggal), "dd MMM yyyy", { locale: id })}</TableCell>
                     <TableCell className="text-right font-medium">Rp {item.nominal.toLocaleString("id-ID")}</TableCell>
@@ -299,11 +325,11 @@ export default function RencanaPembelanjaanManagement() {
                       <button
                         onClick={() => toggleStatus(item)}
                         className={`inline-flex h-6 w-6 items-center justify-center rounded ${
-                          item.status_dibeli ? "bg-green-100" : "bg-gray-100"
+                          item.status_dibeli ? "bg-green-100 dark:bg-green-900" : "bg-gray-100 dark:bg-gray-700"
                         }`}
                       >
                         {item.status_dibeli ? (
-                          <Check className="h-4 w-4 text-green-600" />
+                          <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
                         ) : (
                           <X className="h-4 w-4 text-gray-400" />
                         )}
